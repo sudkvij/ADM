@@ -32,7 +32,7 @@ public class EmployeeController {
         return employeeService.getEmployee(empId);
     }
 
-    @GetMapping("/employee")
+    @GetMapping("/chaining")
     public String chaining() {
         ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/employees", String.class);
         return "Employees + " + response.getBody();

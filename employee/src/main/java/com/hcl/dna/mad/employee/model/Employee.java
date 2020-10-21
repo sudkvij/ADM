@@ -13,6 +13,14 @@ public class Employee {
     private String EmpNum;
     @Column(name="FIRST_NAME")
     private String firstName;
+    @Column(name="LAST_NAME")
+    private String lastName;
+
+    public Employee() {
+    }
+
+    @Column(name="ADDRESS1")
+    private String address1;
 
     public Long getId() {
         return id;
@@ -54,8 +62,5 @@ public class Employee {
         this.address1 = address1;
     }
 
-    @Column(name="LAST_NAME")
-    private String lastName;
-    @Column(name="ADDRESS1")
-    private String address1;
+
 }

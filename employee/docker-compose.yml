@@ -1,0 +1,47 @@
+version: "3.0"
+services:
+  dbpostgres:
+    image: postgres:latest
+    container_name: dbpostgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=employeedb
+    networks:
+      - jaeger-tracing
+  jaeger:
+    image: jaegertracing/all-in-one
+    container_name: jaeger-tracing
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "9411:9411"
+    networks:
+      - jaeger-tracing
+  # APP*****************************************
+  employeeapp:
+    image: employeeapp:latest
+    container_name: employeeapp
+    build: ./
+    ports:
+      - 8080:8080
+    environment:
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    networks:
+      - jaeger-tracing
+    depends_on:
+      - dbpostgres
+      - jaeger
+volumes:
+  postgres-data:
+networks:
+  jaeger-tracing:
